@@ -24,11 +24,11 @@ struct Shader : public IShader {
     mat<3,3,float> ndc_tri;     // triangle in normalized device coordinates
 
     virtual Vec4f vertex(int iface, int nthvert) {
-        varying_uv.set_col(nthvert, model->uv(iface, nthvert));
-        varying_nrm.set_col(nthvert, proj<3>((Projection*ModelView).invert_transpose()*embed<4>(model->normal(iface, nthvert), 0.f)));
+        varying_uv.set_col(static_cast<size_t>(nthvert), model->uv(iface, nthvert));
+        varying_nrm.set_col(static_cast<size_t>(nthvert), proj<3>((Projection*ModelView).invert_transpose()*embed<4>(model->normal(iface, nthvert), 0.f)));
         Vec4f gl_Vertex = Projection*ModelView*embed<4>(model->vert(iface, nthvert));
-        varying_tri.set_col(nthvert, gl_Vertex);
-        ndc_tri.set_col(nthvert, proj<3>(gl_Vertex/gl_Vertex[3]));
+        varying_tri.set_col(static_cast<size_t>(nthvert), gl_Vertex);
+        ndc_tri.set_col(static_cast<size_t>(nthvert), proj<3>(gl_Vertex/gl_Vertex[3]));
         return gl_Vertex;
     }
 

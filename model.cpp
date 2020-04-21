@@ -44,7 +44,7 @@ Model::Model(const char *filename) : verts_(), faces_(), norms_(), uv_(), diffus
     load_texture(filename, "_spec.tga",    specularmap_);
 }
 
-Model::~Model() {}
+Model::~Model() = default;
 
 int Model::nverts() {
     return static_cast<int>(verts_.size());

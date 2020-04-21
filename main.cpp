@@ -1,13 +1,16 @@
-#include "tgaimage.h"
-#include "model.h"
 #include "geometry.h"
+#include "model.h"
 #include "our_gl.h"
+#include "tgaimage.h"
+
+#include <Eigen/Dense>
 
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <vector>
 
-Model *model        = NULL;
+std::unique_ptr<Model> model{};
 
 const int width  = 800;
 const int height = 800;
@@ -75,7 +78,7 @@ int main(int argc, char** argv) {
     light_dir = proj<3>((Projection*ModelView*embed<4>(light_dir, 0.f))).normalize();
 
     for (int m=1; m<argc; m++) {
-        model = new Model(argv[m]);
+        model = std::make_unique<Model>(argv[m]);
         Shader shader;
         for (int i=0; i<model->nfaces(); i++) {
             for (int j=0; j<3; j++) {
@@ -83,7 +86,6 @@ int main(int argc, char** argv) {
             }
             triangle(shader.varying_tri, shader, frame, zbuffer.data());
         }
-        delete model;
     }
     frame.flip_vertically(); // to place the origin in the bottom left corner of the image
     frame.write_tga_file("framebuffer.tga");

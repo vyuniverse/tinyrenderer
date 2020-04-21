@@ -11,6 +11,8 @@ target_compile_features(ProjectOptions INTERFACE cxx_std_17)
 add_library(ProjectWarnings INTERFACE)
 set_project_warnings(ProjectWarnings)
 
+find_package(Eigen3 3.3.7 REQUIRED NO_MODULE)
+
 add_executable(tinyrenderer
     geometry.cpp
     main.cpp
@@ -21,6 +23,7 @@ add_executable(tinyrenderer
 
 target_link_libraries(tinyrenderer
     PRIVATE
+    Eigen3::Eigen
     ProjectOptions
     ProjectWarnings
 )

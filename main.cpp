@@ -1,10 +1,11 @@
-#include <vector>
-#include <limits>
-#include <iostream>
 #include "tgaimage.h"
 #include "model.h"
 #include "geometry.h"
 #include "our_gl.h"
+
+#include <iostream>
+#include <limits>
+#include <vector>
 
 Model *model        = NULL;
 
@@ -65,8 +66,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    float *zbuffer = new float[width*height];
-    for (int i=width*height; i--; zbuffer[i] = -std::numeric_limits<float>::max());
+    std::vector<float> zbuffer(width * height, std::numeric_limits<float>::lowest());
 
     TGAImage frame(width, height, TGAImage::RGB);
     lookat(eye, center, up);
@@ -81,14 +81,13 @@ int main(int argc, char** argv) {
             for (int j=0; j<3; j++) {
                 shader.vertex(i, j);
             }
-            triangle(shader.varying_tri, shader, frame, zbuffer);
+            triangle(shader.varying_tri, shader, frame, zbuffer.data());
         }
         delete model;
     }
     frame.flip_vertically(); // to place the origin in the bottom left corner of the image
     frame.write_tga_file("framebuffer.tga");
 
-    delete [] zbuffer;
     return 0;
 }
 

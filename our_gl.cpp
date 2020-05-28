@@ -1,7 +1,10 @@
 #include <cmath>
 #include <limits>
 #include <cstdlib>
+
+#include "IShader.h"
 #include "our_gl.h"
+#include "tgaimage.h"
 
 Matrix ModelView;
 Matrix Viewport;

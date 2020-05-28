@@ -313,7 +313,7 @@ bool TGAImage::flip_vertically() {
 }
 
 const unsigned char *TGAImage::buffer() const {
-    return data.data();
+    return data.empty() ? nullptr : data.data();
 }
 
 void TGAImage::clear() {

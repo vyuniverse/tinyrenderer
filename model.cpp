@@ -5,16 +5,28 @@
 #include "model.h"
 #include "TGAColor.h"
 
-Model::Model(const char *filename)
-    : verts_{}
-    , faces_{}
-    , norms_{}
-    , uv_{}
-    , diffusemap_{}
-    , normalmap_{}
-    , specularmap_{} {
+namespace
+{
+    void load_texture(const std::string& filename, TGAImage& image)
+    {
+        std::cerr << "texture file " << filename << " loading " << (image.read_tga_file(filename.c_str()) ? "ok" : "failed") << '\n';
+        image.flip_vertically();
+    }
+}
+
+Model::Model(const std::string& object_filename,
+    const std::string& diffuse_map_filename,
+    const std::string& normal_map_filename,
+    const std::string& specular_map_filename)
+: verts_{}
+, faces_{}
+, norms_{}
+, uv_{}
+, diffusemap_{}
+, normalmap_{}
+, specularmap_{} {
     std::ifstream in;
-    in.open (filename, std::ifstream::in);
+    in.open (object_filename, std::ifstream::in);
     if (in.fail()) return;
     std::string line;
     while (!in.eof()) {
@@ -48,9 +60,10 @@ Model::Model(const char *filename)
         }
     }
     std::cerr << "# v# " << verts_.size() << " f# "  << faces_.size() << " vt# " << uv_.size() << " vn# " << norms_.size() << std::endl;
-    load_texture(filename, "_diffuse.tga", diffusemap_);
-    load_texture(filename, "_nm_tangent.tga",      normalmap_);
-    load_texture(filename, "_spec.tga",    specularmap_);
+
+    load_texture(diffuse_map_filename, diffusemap_);
+    load_texture(normal_map_filename, normalmap_);
+    load_texture(specular_map_filename, specularmap_);
 }
 
 Model::~Model() = default;
@@ -75,24 +88,6 @@ Vec3f Model::vert(int i) const {
 
 Vec3f Model::vert(int iface, int nthvert) const {
     return verts_[faces_[iface][nthvert][0]];
-}
-
-std::string add_suffix(std::string filename, const char* suffix)
-{
-    if (const auto dot = filename.find_last_of("."); dot != std::string::npos)
-    {
-        return filename.substr(0,dot) + suffix;
-    }
-    else
-    {
-        throw std::runtime_error{ "add_suffix: no extension found" };
-    }
-}
-
-void Model::load_texture(std::string texfile, const char *suffix, TGAImage &img) {
-    const auto filename = add_suffix(std::move(texfile), suffix);
-    std::cerr << "texture file " << filename << " loading " << (img.read_tga_file(filename.c_str()) ? "ok" : "failed") << std::endl;
-    img.flip_vertically();
 }
 
 TGAColor Model::diffuse(Vec2f uvf) const {

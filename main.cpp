@@ -6,10 +6,8 @@
 #include "geometry.h"
 #include "our_gl.h"
 
-#include <vector>
-
-const int width  = 800;
-const int height = 800;
+constexpr int width  = 800;
+constexpr int height = 800;
 
 Vec3f light_dir(1,1,1);
 Vec3f       eye(1,1,3);
@@ -18,7 +16,7 @@ Vec3f        up(0,1,0);
 
 struct Shader : public IShader {
     Shader(Model& model)
-    : model(model)
+    : model{ model }
     {
     }
 
@@ -81,8 +79,8 @@ int main(int argc, char** argv) {
     light_dir = proj<3>((Projection*ModelView*embed<4>(light_dir, 0.f))).normalize();
 
     for (int m=1; m<argc; m++) {
-        Model model(argv[m]);
-        Shader shader(model);
+        Model model{ argv[m] };
+        Shader shader{ model };
         for (int i=0; i<model.nfaces(); i++) {
             for (int j=0; j<3; j++) {
                 shader.vertex(i, j);

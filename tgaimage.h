@@ -2,12 +2,13 @@
 #define __IMAGE_H__
 
 #include <iosfwd>
+#include <vector>
 
 struct TGAColor;
 
 class TGAImage {
 protected:
-    unsigned char* data;
+    std::vector<unsigned char> data;
     int width;
     int height;
     int bytespp;
@@ -30,7 +31,6 @@ public:
     TGAColor get(int x, int y) const;
     bool set(int x, int y, TGAColor &c);
     bool set(int x, int y, const TGAColor &c);
-    ~TGAImage();
     TGAImage & operator =(const TGAImage &img);
     int get_width() const;
     int get_height() const;

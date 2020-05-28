@@ -6,6 +6,8 @@
 #include "geometry.h"
 #include "our_gl.h"
 
+#include <vector>
+
 Model *model        = NULL;
 
 const int width  = 800;
@@ -65,8 +67,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    float *zbuffer = new float[width*height];
-    for (int i=width*height; i--; zbuffer[i] = -std::numeric_limits<float>::max());
+    std::vector<float> zbuffer(width * height, -std::numeric_limits<float>::max());
 
     TGAImage frame(width, height, TGAImage::RGB);
     lookat(eye, center, up);
@@ -75,20 +76,19 @@ int main(int argc, char** argv) {
     light_dir = proj<3>((Projection*ModelView*embed<4>(light_dir, 0.f))).normalize();
 
     for (int m=1; m<argc; m++) {
-        model = new Model(argv[m]);
+        Model model_(argv[m]);
+        model = &model_;
         Shader shader;
         for (int i=0; i<model->nfaces(); i++) {
             for (int j=0; j<3; j++) {
                 shader.vertex(i, j);
             }
-            triangle(shader.varying_tri, shader, frame, zbuffer);
+            triangle(shader.varying_tri, shader, frame, zbuffer.data());
         }
-        delete model;
     }
     frame.flip_vertically(); // to place the origin in the bottom left corner of the image
     frame.write_tga_file("framebuffer.tga");
 
-    delete [] zbuffer;
     return 0;
 }
 

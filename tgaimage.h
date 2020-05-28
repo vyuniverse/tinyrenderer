@@ -14,7 +14,7 @@ protected:
     int bytespp;
 
     bool   load_rle_data(std::ifstream &in);
-    bool unload_rle_data(std::ofstream &out);
+    bool unload_rle_data(std::ofstream &out) const;
 public:
     enum Format {
         GRAYSCALE=1, RGB=3, RGBA=4
@@ -24,7 +24,7 @@ public:
     TGAImage(int w, int h, int bpp);
     TGAImage(const TGAImage &img);
     bool read_tga_file(const char *filename);
-    bool write_tga_file(const char *filename, bool rle=true);
+    bool write_tga_file(const char *filename, bool rle=true) const;
     bool flip_horizontally();
     bool flip_vertically();
     bool scale(int w, int h);
@@ -34,8 +34,8 @@ public:
     TGAImage & operator =(const TGAImage &img);
     int get_width() const;
     int get_height() const;
-    int get_bytespp();
-    unsigned char *buffer();
+    int get_bytespp() const;
+    const unsigned char *buffer() const;
     void clear();
 };
 

@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include "TGA_Header.h"
+#include "TGAColor.h"
 #include "tgaimage.h"
 
 TGAImage::TGAImage() : data(NULL), width(0), height(0), bytespp(0) {}

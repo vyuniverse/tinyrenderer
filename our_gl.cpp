@@ -4,6 +4,7 @@
 
 #include "IShader.h"
 #include "our_gl.h"
+#include "TGAColor.h"
 #include "tgaimage.h"
 
 Matrix ModelView;

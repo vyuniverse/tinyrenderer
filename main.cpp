@@ -1,6 +1,7 @@
 #include <vector>
 #include <limits>
 #include <iostream>
+#include "TGAColor.h"
 #include "tgaimage.h"
 #include "model.h"
 #include "geometry.h"

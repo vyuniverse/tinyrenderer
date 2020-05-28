@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include "model.h"
+#include "TGAColor.h"
 
 Model::Model(const char *filename)
     : verts_{}

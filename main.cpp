@@ -5,6 +5,7 @@
 #include "model.h"
 #include "geometry.h"
 #include "our_gl.h"
+#include "IShader.h"
 
 constexpr int width  = 800;
 constexpr int height = 800;

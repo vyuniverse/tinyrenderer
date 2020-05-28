@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include "model.h"
 #include "TGAColor.h"
 
@@ -76,14 +77,22 @@ Vec3f Model::vert(int iface, int nthvert) const {
     return verts_[faces_[iface][nthvert][0]];
 }
 
-void Model::load_texture(std::string filename, const char *suffix, TGAImage &img) {
-    std::string texfile(filename);
-    size_t dot = texfile.find_last_of(".");
-    if (dot!=std::string::npos) {
-        texfile = texfile.substr(0,dot) + std::string(suffix);
-        std::cerr << "texture file " << texfile << " loading " << (img.read_tga_file(texfile.c_str()) ? "ok" : "failed") << std::endl;
-        img.flip_vertically();
+std::string add_suffix(std::string filename, const char* suffix)
+{
+    if (const auto dot = filename.find_last_of("."); dot != std::string::npos)
+    {
+        return filename.substr(0,dot) + suffix;
     }
+    else
+    {
+        throw std::runtime_error{ "add_suffix: no extension found" };
+    }
+}
+
+void Model::load_texture(std::string texfile, const char *suffix, TGAImage &img) {
+    const auto filename = add_suffix(std::move(texfile), suffix);
+    std::cerr << "texture file " << filename << " loading " << (img.read_tga_file(filename.c_str()) ? "ok" : "failed") << std::endl;
+    img.flip_vertically();
 }
 
 TGAColor Model::diffuse(Vec2f uvf) const {

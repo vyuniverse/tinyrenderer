@@ -1,3 +1,4 @@
+#include <exception>
 #include <vector>
 #include <limits>
 #include <iostream>
@@ -67,32 +68,44 @@ struct Shader : public IShader {
 };
 
 int main(int argc, char** argv) {
-    if (2>argc) {
-        std::cerr << "Usage: " << argv[0] << " obj/model.obj" << std::endl;
-        return 1;
-    }
-
-    std::vector<float> zbuffer(width * height, -std::numeric_limits<float>::max());
-
-    TGAImage frame(width, height, TGAImage::RGB);
-    lookat(eye, center, up);
-    viewport(width/8, height/8, width*3/4, height*3/4);
-    projection(-1.f/(eye-center).norm());
-    light_dir = proj<3>((Projection*ModelView*embed<4>(light_dir, 0.f))).normalize();
-
-    for (int m=1; m<argc; m++) {
-        Model model{ argv[m] };
-        Shader shader{ model };
-        for (int i=0; i<model.nfaces(); i++) {
-            for (int j=0; j<3; j++) {
-                shader.vertex(i, j);
-            }
-            triangle(shader.varying_tri, shader, frame, zbuffer.data());
+    try
+    {
+        if (2>argc) {
+            std::cerr << "Usage: " << argv[0] << " obj/model.obj" << std::endl;
+            return 1;
         }
-    }
-    frame.flip_vertically(); // to place the origin in the bottom left corner of the image
-    frame.write_tga_file("framebuffer.tga");
 
-    return 0;
+        std::vector<float> zbuffer(width * height, -std::numeric_limits<float>::max());
+
+        TGAImage frame(width, height, TGAImage::RGB);
+        lookat(eye, center, up);
+        viewport(width/8, height/8, width*3/4, height*3/4);
+        projection(-1.f/(eye-center).norm());
+        light_dir = proj<3>((Projection*ModelView*embed<4>(light_dir, 0.f))).normalize();
+
+        for (int m=1; m<argc; m++) {
+            Model model{ argv[m] };
+            Shader shader{ model };
+            for (int i=0; i<model.nfaces(); i++) {
+                for (int j=0; j<3; j++) {
+                    shader.vertex(i, j);
+                }
+                triangle(shader.varying_tri, shader, frame, zbuffer.data());
+            }
+        }
+        frame.flip_vertically(); // to place the origin in the bottom left corner of the image
+        frame.write_tga_file("framebuffer.tga");
+
+        return 0;
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "An exception was thrown: " << e.what() << '\n';
+    }
+    catch (...)
+    {
+        std::cerr << "An unknown exception was thrown\n";
+    }
+    return -1;
 }
 

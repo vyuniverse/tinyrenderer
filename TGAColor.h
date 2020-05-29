@@ -1,9 +1,11 @@
 #ifndef TGA_COLOR_H
 #define TGA_COLOR_H
 
+#include <array>
+
 struct TGAColor
 {
-    unsigned char bgra[4];
+    std::array<unsigned char, 4> bgra;
     unsigned char bytespp;
 
     TGAColor();
@@ -14,6 +16,7 @@ struct TGAColor
     TGAColor(const unsigned char* p, unsigned char bpp);
 
     unsigned char& operator[](const int i);
+    unsigned char operator[](int i) const;
     TGAColor operator*(float intensity) const;
 };
 

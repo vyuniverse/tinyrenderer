@@ -4,33 +4,24 @@ TGAColor::TGAColor()
 : bgra{}
 , bytespp{1}
 {
-    for (int i = 0; i < 4; i++)
-        bgra[i] = 0;
 }
 
 TGAColor::TGAColor(unsigned char R, unsigned char G, unsigned char B,
                    unsigned char A)
-: bgra()
-, bytespp(4)
+: bgra{B, G, R, A}
+, bytespp{4}
 {
-    bgra[0] = B;
-    bgra[1] = G;
-    bgra[2] = R;
-    bgra[3] = A;
 }
 
 TGAColor::TGAColor(unsigned char v)
-: bgra()
+: bgra{v, 0, 0, 0}
 , bytespp(1)
 {
-    for (int i = 0; i < 4; i++)
-        bgra[i] = 0;
-    bgra[0] = v;
 }
 
 TGAColor::TGAColor(const unsigned char* p, unsigned char bpp)
-: bgra()
-, bytespp(bpp)
+: bgra{}
+, bytespp{bpp}
 {
     for (int i = 0; i < (int)bpp; i++)
     {
@@ -43,6 +34,11 @@ TGAColor::TGAColor(const unsigned char* p, unsigned char bpp)
 }
 
 unsigned char& TGAColor::operator[](const int i)
+{
+    return bgra[i];
+}
+
+unsigned char TGAColor::operator[](int i) const
 {
     return bgra[i];
 }

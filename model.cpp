@@ -117,6 +117,10 @@ Vec3f Model::vert(int iface, int nthvert) const
 
 TGAColor Model::diffuse(Vec2f uvf) const
 {
+    if (!diffusemap_.buffer())
+    {
+        return {255, 255, 255};
+    }
     Vec2i uv(uvf[0] * diffusemap_.get_width(),
              uvf[1] * diffusemap_.get_height());
     return diffusemap_.get(uv[0], uv[1]);

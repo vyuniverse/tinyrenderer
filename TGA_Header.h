@@ -1,8 +1,9 @@
 #ifndef TGA_HEADER_H
 #define TGA_HEADER_H
 
-#pragma pack(push,1)
-struct TGA_Header {
+#pragma pack(push, 1)
+struct TGA_Header
+{
     char idlength;
     char colormaptype;
     char datatypecode;
@@ -13,10 +14,9 @@ struct TGA_Header {
     short y_origin;
     short width;
     short height;
-    char  bitsperpixel;
-    char  imagedescriptor;
+    char bitsperpixel;
+    char imagedescriptor;
 };
 #pragma pack(pop)
 
 #endif
-

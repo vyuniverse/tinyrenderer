@@ -25,7 +25,7 @@ public:
 
     virtual Vec4f vertex(int iface, int nthvert) override;
 
-    virtual fragment_result fragment(const Vec3f& barycentric) override;
+    virtual fragment_result fragment(const Vec3f& barycentric) const override;
 };
 
 #endif

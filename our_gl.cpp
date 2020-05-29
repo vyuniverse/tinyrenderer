@@ -28,11 +28,11 @@ void projection(float coeff)
     Projection[3][2] = coeff;
 }
 
-void lookat(Vec3f eye, Vec3f center, Vec3f up)
+void lookat(const Vec3f& eye, const Vec3f& center, const Vec3f& up)
 {
-    Vec3f z = (eye - center).normalize();
-    Vec3f x = cross(up, z).normalize();
-    Vec3f y = cross(z, x).normalize();
+    const Vec3f z = (eye - center).normalize();
+    const Vec3f x = cross(up, z).normalize();
+    const Vec3f y = cross(z, x).normalize();
     Matrix Minv = Matrix::identity();
     Matrix Tr = Matrix::identity();
     for (int i = 0; i < 3; i++)
@@ -45,7 +45,8 @@ void lookat(Vec3f eye, Vec3f center, Vec3f up)
     ModelView = Minv * Tr;
 }
 
-Vec3f barycentric(Vec2f A, Vec2f B, Vec2f C, Vec2f P)
+Vec3f barycentric(const Vec2f& A, const Vec2f& B, const Vec2f& C,
+                  const Vec2f& P)
 {
     Vec3f s[2];
     for (int i = 2; i--;)
@@ -54,7 +55,7 @@ Vec3f barycentric(Vec2f A, Vec2f B, Vec2f C, Vec2f P)
         s[i][1] = B[i] - A[i];
         s[i][2] = A[i] - P[i];
     }
-    Vec3f u = cross(s[0], s[1]);
+    const Vec3f u = cross(s[0], s[1]);
     if (std::abs(u[2]) > 1e-2) // dont forget that u[2] is integer. If it is
                                // zero then triangle ABC is degenerate
         return Vec3f(1.f - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z);
@@ -62,8 +63,8 @@ Vec3f barycentric(Vec2f A, Vec2f B, Vec2f C, Vec2f P)
                             // will be thrown away by the rasterizator
 }
 
-void triangle(mat<4, 3, float>& clipc, IShader& shader, TGAImage& image,
-              float* zbuffer)
+void triangle(const mat<4, 3, float>& clipc, const IShader& shader,
+              TGAImage& image, float* zbuffer)
 {
     mat<3, 4, float> pts =
         (Viewport * clipc)

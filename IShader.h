@@ -15,7 +15,7 @@ struct IShader
         TGAColor colour;
     };
 
-    virtual fragment_result fragment(const Vec3f& barycentric) = 0;
+    virtual fragment_result fragment(const Vec3f& barycentric) const = 0;
 };
 
 #endif

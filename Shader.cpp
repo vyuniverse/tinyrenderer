@@ -22,7 +22,7 @@ Vec4f Shader::vertex(int iface, int nthvert)
     return gl_Vertex;
 }
 
-auto Shader::fragment(const Vec3f& barycentric) -> fragment_result
+auto Shader::fragment(const Vec3f& barycentric) const -> fragment_result
 {
     const auto bn = (varying_nrm * barycentric).normalize();
     const auto uv = varying_uv * barycentric;

@@ -7,10 +7,10 @@ extern Matrix Projection;
 
 void viewport(int x, int y, int w, int h);
 void projection(float coeff = 0.f); // coeff = -1/c
-void lookat(Vec3f eye, Vec3f center, Vec3f up);
+void lookat(const Vec3f& eye, const Vec3f& center, const Vec3f& up);
 
 struct IShader;
 class TGAImage;
-void triangle(mat<4, 3, float>& pts, IShader& shader, TGAImage& image,
-              float* zbuffer);
+void triangle(const mat<4, 3, float>& pts, const IShader& shader,
+              TGAImage& image, float* zbuffer);
 #endif //__OUR_GL_H__

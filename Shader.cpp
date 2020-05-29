@@ -5,7 +5,7 @@
 
 Shader::Shader(Model& model, Vec3f light_dir)
 : model{model}
-, light_dir{light_dir}
+, light_dir{std::move(light_dir)}
 {
 }
 
@@ -22,17 +22,17 @@ Vec4f Shader::vertex(int iface, int nthvert)
     return gl_Vertex;
 }
 
-bool Shader::fragment(Vec3f bar, TGAColor& color)
+auto Shader::fragment(const Vec3f& barycentric) -> fragment_result
 {
-    Vec3f bn = (varying_nrm * bar).normalize();
-    Vec2f uv = varying_uv * bar;
+    const auto bn = (varying_nrm * barycentric).normalize();
+    const auto uv = varying_uv * barycentric;
 
     mat<3, 3, float> A;
     A[0] = ndc_tri.col(1) - ndc_tri.col(0);
     A[1] = ndc_tri.col(2) - ndc_tri.col(0);
     A[2] = bn;
 
-    mat<3, 3, float> AI = A.invert();
+    const auto AI = A.invert();
 
     Vec3f i = AI * Vec3f(varying_uv[0][1] - varying_uv[0][0],
                          varying_uv[0][2] - varying_uv[0][0], 0);
@@ -44,10 +44,8 @@ bool Shader::fragment(Vec3f bar, TGAColor& color)
     B.set_col(1, j.normalize());
     B.set_col(2, bn);
 
-    Vec3f n = (B * model.normal(uv)).normalize();
+    const auto n = (B * model.normal(uv)).normalize();
+    const auto diff = std::max(0.f, n * light_dir);
 
-    float diff = std::max(0.f, n * light_dir);
-    color = model.diffuse(uv) * diff;
-
-    return false;
+    return {false, model.diffuse(uv) * diff};
 }

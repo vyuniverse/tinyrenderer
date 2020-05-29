@@ -86,22 +86,20 @@ void triangle(mat<4, 3, float>& clipc, IShader& shader, TGAImage& image,
         }
     }
     Vec2i P;
-    TGAColor color;
     for (P.x = bboxmin.x; P.x <= bboxmax.x; P.x++)
     {
         for (P.y = bboxmin.y; P.y <= bboxmax.y; P.y++)
         {
-            Vec3f bc_screen = barycentric(pts2[0], pts2[1], pts2[2], P);
-            Vec3f bc_clip =
-                Vec3f(bc_screen.x / pts[0][3], bc_screen.y / pts[1][3],
-                      bc_screen.z / pts[2][3]);
+            const Vec3f bc_screen = barycentric(pts2[0], pts2[1], pts2[2], P);
+            Vec3f bc_clip{bc_screen.x / pts[0][3], bc_screen.y / pts[1][3],
+                          bc_screen.z / pts[2][3]};
             bc_clip = bc_clip / (bc_clip.x + bc_clip.y + bc_clip.z);
-            float frag_depth = clipc[2] * bc_clip;
+            const float frag_depth = clipc[2] * bc_clip;
             if (bc_screen.x < 0 || bc_screen.y < 0 || bc_screen.z < 0 ||
                 zbuffer[P.x + P.y * image.get_width()] > frag_depth)
                 continue;
-            bool discard = shader.fragment(bc_clip, color);
-            if (!discard)
+            if (const auto& [discard, color] = shader.fragment(bc_clip);
+                !discard)
             {
                 zbuffer[P.x + P.y * image.get_width()] = frag_depth;
                 image.set(P.x, P.y, color);

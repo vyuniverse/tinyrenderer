@@ -128,8 +128,9 @@ TGAColor Model::diffuse(Vec2f uvf) const
 
 Vec3f Model::normal(Vec2f uvf) const
 {
-    Vec2i uv(uvf[0] * normalmap_.get_width(), uvf[1] * normalmap_.get_height());
-    TGAColor c = normalmap_.get(uv[0], uv[1]);
+    const Vec2i uv{static_cast<int>(uvf[0] * normalmap_.get_width()),
+                   static_cast<int>(uvf[1] * normalmap_.get_height())};
+    const TGAColor c = normalmap_.get(uv[0], uv[1]);
     Vec3f res;
     for (int i = 0; i < 3; i++)
         res[2 - i] = (float)c[i] / 255.f * 2.f - 1.f;

@@ -1,15 +1,21 @@
 #ifndef ISHADER_H
 #define ISHADER_H
 
+#include "TGAColor.h"
 #include "geometry.h"
-
-struct TGAColor;
 
 struct IShader
 {
     virtual ~IShader();
     virtual Vec4f vertex(int iface, int nthvert) = 0;
-    virtual bool fragment(Vec3f bar, TGAColor& color) = 0;
+
+    struct fragment_result
+    {
+        bool discard;
+        TGAColor colour;
+    };
+
+    virtual fragment_result fragment(const Vec3f& barycentric) = 0;
 };
 
 #endif

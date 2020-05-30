@@ -10,7 +10,9 @@ struct TGAColor
 
     TGAColor();
 
-    TGAColor(unsigned char R, unsigned char G, unsigned char B,
+    TGAColor(unsigned char R,
+             unsigned char G,
+             unsigned char B,
              unsigned char A = 255);
     TGAColor(unsigned char v);
     TGAColor(const unsigned char* p, unsigned char bpp);

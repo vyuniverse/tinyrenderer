@@ -35,9 +35,11 @@ auto Shader::fragment(const Vec3f& barycentric) const -> fragment_result
     const auto AI = A.invert();
 
     Vec3f i = AI * Vec3f(varying_uv[0][1] - varying_uv[0][0],
-                         varying_uv[0][2] - varying_uv[0][0], 0);
+                         varying_uv[0][2] - varying_uv[0][0],
+                         0);
     Vec3f j = AI * Vec3f(varying_uv[1][1] - varying_uv[1][0],
-                         varying_uv[1][2] - varying_uv[1][0], 0);
+                         varying_uv[1][2] - varying_uv[1][0],
+                         0);
 
     Mat33f B;
     B.set_col(0, i.normalize());

@@ -6,7 +6,9 @@ TGAColor::TGAColor()
 {
 }
 
-TGAColor::TGAColor(unsigned char R, unsigned char G, unsigned char B,
+TGAColor::TGAColor(unsigned char R,
+                   unsigned char G,
+                   unsigned char B,
                    unsigned char A)
 : bgra{B, G, R, A}
 , bytespp{4}

@@ -45,7 +45,9 @@ void lookat(const Vec3f& eye, const Vec3f& center, const Vec3f& up)
     ModelView = Minv * Tr;
 }
 
-Vec3f barycentric(const Vec2f& A, const Vec2f& B, const Vec2f& C,
+Vec3f barycentric(const Vec2f& A,
+                  const Vec2f& B,
+                  const Vec2f& C,
                   const Vec2f& P)
 {
     Vec3f s[2];
@@ -63,7 +65,9 @@ Vec3f barycentric(const Vec2f& A, const Vec2f& B, const Vec2f& C,
                             // will be thrown away by the rasterizator
 }
 
-void triangle(const Mat43f& clipc, const IShader& shader, TGAImage& image,
+void triangle(const Mat43f& clipc,
+              const IShader& shader,
+              TGAImage& image,
               float* zbuffer)
 {
     Mat34f pts =
@@ -92,7 +96,8 @@ void triangle(const Mat43f& clipc, const IShader& shader, TGAImage& image,
         for (P.y = bboxmin.y; P.y <= bboxmax.y; P.y++)
         {
             const Vec3f bc_screen = barycentric(pts2[0], pts2[1], pts2[2], P);
-            Vec3f bc_clip{bc_screen.x / pts[0][3], bc_screen.y / pts[1][3],
+            Vec3f bc_clip{bc_screen.x / pts[0][3],
+                          bc_screen.y / pts[1][3],
                           bc_screen.z / pts[2][3]};
             bc_clip = bc_clip / (bc_clip.x + bc_clip.y + bc_clip.z);
             const float frag_depth = clipc[2] * bc_clip;

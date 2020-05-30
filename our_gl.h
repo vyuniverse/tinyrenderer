@@ -11,6 +11,8 @@ void lookat(const Vec3f& eye, const Vec3f& center, const Vec3f& up);
 
 struct IShader;
 class TGAImage;
-void triangle(const Mat43f& pts, const IShader& shader, TGAImage& image,
+void triangle(const Mat43f& pts,
+              const IShader& shader,
+              TGAImage& image,
               float* zbuffer);
 #endif //__OUR_GL_H__

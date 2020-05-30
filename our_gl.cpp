@@ -7,13 +7,13 @@
 #include "our_gl.h"
 #include "tgaimage.h"
 
-Matrix ModelView;
-Matrix Viewport;
-Matrix Projection;
+Mat44f ModelView;
+Mat44f Viewport;
+Mat44f Projection;
 
 void viewport(int x, int y, int w, int h)
 {
-    Viewport = Matrix::identity();
+    Viewport = Mat44f::identity();
     Viewport[0][3] = x + w / 2.f;
     Viewport[1][3] = y + h / 2.f;
     Viewport[2][3] = 1.f;
@@ -24,7 +24,7 @@ void viewport(int x, int y, int w, int h)
 
 void projection(float coeff)
 {
-    Projection = Matrix::identity();
+    Projection = Mat44f::identity();
     Projection[3][2] = coeff;
 }
 
@@ -33,8 +33,8 @@ void lookat(const Vec3f& eye, const Vec3f& center, const Vec3f& up)
     const Vec3f z = (eye - center).normalize();
     const Vec3f x = cross(up, z).normalize();
     const Vec3f y = cross(z, x).normalize();
-    Matrix Minv = Matrix::identity();
-    Matrix Tr = Matrix::identity();
+    Mat44f Minv = Mat44f::identity();
+    Mat44f Tr = Mat44f::identity();
     for (int i = 0; i < 3; i++)
     {
         Minv[0][i] = x[i];
@@ -63,13 +63,13 @@ Vec3f barycentric(const Vec2f& A, const Vec2f& B, const Vec2f& C,
                             // will be thrown away by the rasterizator
 }
 
-void triangle(const mat<4, 3, float>& clipc, const IShader& shader,
-              TGAImage& image, float* zbuffer)
+void triangle(const Mat43f& clipc, const IShader& shader, TGAImage& image,
+              float* zbuffer)
 {
-    mat<3, 4, float> pts =
+    Mat34f pts =
         (Viewport * clipc)
             .transpose(); // transposed to ease access to each of the points
-    mat<3, 2, float> pts2;
+    Mat32f pts2;
     for (int i = 0; i < 3; i++)
         pts2[i] = proj<2>(pts[i] / pts[i][3]);
 

@@ -15,13 +15,13 @@ public:
     const Model& model;
     const Vec3f light_dir;
 
-    mat<2, 3, float> varying_uv;  // triangle uv coordinates, written by the
-                                  // vertex shader, read by the fragment shader
-    mat<4, 3, float> varying_tri; // triangle coordinates (clip coordinates),
-                                  // written by VS, read by fragment shader
-    mat<3, 3, float>
+    Mat23f varying_uv;  // triangle uv coordinates, written by the
+                        // vertex shader, read by the fragment shader
+    Mat43f varying_tri; // triangle coordinates (clip coordinates),
+                        // written by VS, read by fragment shader
+    Mat33f
         varying_nrm; // normal per vertex to be interpolated by fragment shader
-    mat<3, 3, float> ndc_tri; // triangle in normalized device coordinates
+    Mat33f ndc_tri;  // triangle in normalized device coordinates
 
     virtual Vec4f vertex(int iface, int nthvert) override;
 

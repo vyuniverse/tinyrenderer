@@ -27,7 +27,7 @@ auto Shader::fragment(const Vec3f& barycentric) const -> fragment_result
     const auto bn = (varying_nrm * barycentric).normalize();
     const auto uv = varying_uv * barycentric;
 
-    mat<3, 3, float> A;
+    Mat33f A;
     A[0] = ndc_tri.col(1) - ndc_tri.col(0);
     A[1] = ndc_tri.col(2) - ndc_tri.col(0);
     A[2] = bn;
@@ -39,7 +39,7 @@ auto Shader::fragment(const Vec3f& barycentric) const -> fragment_result
     Vec3f j = AI * Vec3f(varying_uv[1][1] - varying_uv[1][0],
                          varying_uv[1][2] - varying_uv[1][0], 0);
 
-    mat<3, 3, float> B;
+    Mat33f B;
     B.set_col(0, i.normalize());
     B.set_col(1, j.normalize());
     B.set_col(2, bn);

@@ -33,16 +33,12 @@ private:
 
 template<typename T> struct vec<2, T>
 {
-    vec()
-    : x(T())
-    , y(T())
+    vec(T X = {}, T Y = {})
+    : x{X}
+    , y{Y}
     {
     }
-    vec(T X, T Y)
-    : x(X)
-    , y(Y)
-    {
-    }
+
     template<class U> vec<2, T>(const vec<2, U>& v);
     T& operator[](const size_t i)
     {
@@ -55,37 +51,37 @@ template<typename T> struct vec<2, T>
         return i <= 0 ? x : y;
     }
 
-    T x, y;
+    T x;
+    T y;
 };
 
 /////////////////////////////////////////////////////////////////////////////////
 
 template<typename T> struct vec<3, T>
 {
-    vec()
-    : x(T())
-    , y(T())
-    , z(T())
-    {
-    }
-    vec(T X, T Y, T Z)
+    vec(T X = {}, T Y = {}, T Z = {})
     : x(X)
     , y(Y)
     , z(Z)
     {
     }
+
     template<class U> vec<3, T>(const vec<3, U>& v);
+
     T& operator[](const size_t i)
     {
         assert(i < 3);
         return i <= 0 ? x : (1 == i ? y : z);
     }
+
     const T& operator[](const size_t i) const
     {
         assert(i < 3);
         return i <= 0 ? x : (1 == i ? y : z);
     }
+
     float norm() { return std::sqrt(x * x + y * y + z * z); }
+
     vec<3, T>& normalize(T l = 1)
     {
         *this = (*this) * (l / norm());
@@ -197,7 +193,7 @@ template<size_t DimRows, size_t DimCols, typename T> class mat
     vec<DimCols, T> rows[DimRows];
 
 public:
-    mat() {}
+    mat() = default;
 
     vec<DimCols, T>& operator[](const size_t idx)
     {
@@ -320,10 +316,17 @@ std::ostream& operator<<(std::ostream& out, mat<DimRows, DimCols, T>& m)
 
 /////////////////////////////////////////////////////////////////////////////////
 
-typedef vec<2, float> Vec2f;
-typedef vec<2, int> Vec2i;
-typedef vec<3, float> Vec3f;
-typedef vec<3, int> Vec3i;
-typedef vec<4, float> Vec4f;
-typedef mat<4, 4, float> Matrix;
+using Vec2f = vec<2, float>;
+using Vec2i = vec<2, int>;
+using Vec3f = vec<3, float>;
+using Vec3i = vec<3, int>;
+using Vec4f = vec<4, float>;
+
+using Mat23f = mat<2, 3, float>;
+using Mat32f = mat<3, 2, float>;
+using Mat33f = mat<3, 3, float>;
+using Mat34f = mat<3, 4, float>;
+using Mat43f = mat<4, 3, float>;
+using Mat44f = mat<4, 4, float>;
+
 #endif //__GEOMETRY_H__

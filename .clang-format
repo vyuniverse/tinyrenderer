@@ -16,7 +16,7 @@ BinPackArguments: 'false'
 BinPackParameters: 'false'
 BreakBeforeBraces: Allman
 BreakConstructorInitializers: BeforeComma
-ColumnLimit: '80'
+ColumnLimit: '0'
 CompactNamespaces: 'true'
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 ConstructorInitializerIndentWidth: '0'

@@ -19,9 +19,8 @@ public:
                         // vertex shader, read by the fragment shader
     Mat43f varying_tri; // triangle coordinates (clip coordinates),
                         // written by VS, read by fragment shader
-    Mat33f
-        varying_nrm; // normal per vertex to be interpolated by fragment shader
-    Mat33f ndc_tri;  // triangle in normalized device coordinates
+    Mat33f varying_nrm; // normal per vertex to be interpolated by fragment shader
+    Mat33f ndc_tri;     // triangle in normalized device coordinates
 
     virtual Vec4f vertex(int iface, int nthvert) override;
 
